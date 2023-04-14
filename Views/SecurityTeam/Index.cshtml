@@ -1,0 +1,54 @@
+@model IEnumerable<fleet_tracking.Models.SecurityTeam>
+
+@{
+    ViewData["Title"] = "Security Teams";
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vehicle)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vehicle.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+            <td>
+                <form asp-action="AssignVehicle" method="post" class="form-inline">
+                    <input type="hidden" asp-for="@item.Id" name="id" />
+                    <select asp-for="@item.VehicleId" asp-items="@(new SelectList(ViewBag.Vehicles, "Id", "VehicleName"))" name="vehicleId" class="form-control form-control-sm">
+                        <option value="0">-- Select Vehicle --</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary">Assign</button>
+                </form>
+                <form asp-action="DismissVehicle" method="post" class="form-inline">
+                    <input type="hidden" asp-for="@item.Id" name="id" />
+                    <button type="submit" class="btn btn-sm btn-danger">Dismiss</button>
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
